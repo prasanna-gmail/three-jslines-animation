@@ -1,0 +1,17 @@
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+#container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  border: 1px solid transparent;
+background: #011727 linear-gradient(15deg, #05101e, #112E3E);
+}
