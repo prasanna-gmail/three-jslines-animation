@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>MeshLine Animation</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/three@latest/build/three.min.js"></script>
+
+    <!-- <script src="https://cdn.jsdelivr.net/npm/three.meshline@latest/dist/three.meshline.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/three.meshline@1.4.0/src/THREE.MeshLine.js"></script>
+
+
+</head>
+
+<body>
+    <script>
+        // Initialize Three.js
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a MeshLine
+        const geometry = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector3(-1, 0, 0),
+            new THREE.Vector3(0, 1, 0),
+            new THREE.Vector3(1, 0, 0),
+        ]);
+        const material = new MeshLineMaterial({
+            color: new THREE.Color(0xffffff),
+            lineWidth: 0.1,
+        });
+        const meshLine = new MeshLine();
+        meshLine.setGeometry(geometry);
+
+        // Add the MeshLine to the scene
+        const line = new THREE.Mesh(meshLine.geometry, material);
+        scene.add(line);
+
+        // Animate the MeshLine
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate the line around the y-axis
+            line.rotation.y += 0.01;
+
+            // Update the MeshLine's geometry
+            meshLine.setGeometry(geometry);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Animating Line dashOffset with Three.js</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+    <script>
+        // Create a Three.js scene
+        const scene = new THREE.Scene();
+
+        // Create a camera and set its position
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 5;
+
+        // Create a renderer and set its size
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Create a material for the line
+        const material = new THREE.LineDashedMaterial({ color: 0x0000ff, dashSize: 0.1, gapSize: 0.1 });
+
+        // Define the points for the line
+        const points = [];
+        points.push(new THREE.Vector3(-2, 0, 0));
+        points.push(new THREE.Vector3(0, 2, 0));
+        points.push(new THREE.Vector3(2, 0, 0));
+
+        // Create the line geometry and set its position
+        const geometry = new THREE.BufferGeometry().setFromPoints(points);
+        const line = new THREE.Line(geometry, material);
+        line.position.set(0, 0, 0);
+
+        // Add the line to the scene
+        scene.add(line);
+
+        // Define a variable to hold the current dash offset
+        let dashOffset = 0;
+
+        // Create an animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Update the dash offset based on the time
+            dashOffset -= 0.01;
+
+            // If the dash offset is negative, wrap it around to the end
+            if (dashOffset < 0) {
+                dashOffset = 1 - (Math.abs(dashOffset) % 1);
+            }
+
+            // Set the line's dash offset
+            material.dashOffset = dashOffset;
+
+            // Render the scene
+            renderer.render(scene, camera);
+        }
+
+        // Start the animation loop
+        animate();
+    </script>
+</body>
+
+</html>

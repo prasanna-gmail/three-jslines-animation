@@ -99,7 +99,7 @@ function render(time) {
     const delta = clock.getDelta();
     const t = clock.getElapsedTime();
 
-    p = p < 1 ? Math.min(p + 1 / 50, 1) : 0.01;
+    p = p < 1 ? Math.min(p + 1 / 100, 1) : 0.01;
     const point = path.curve.getPointAt(p);
     line.advance(point);
 

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Animating Line dashOffset with Three.js</title>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.rawgit.com/mrdoob/three.js/master/build/three.min.js"></script>
+    <script>
+        let scene = new THREE.Scene();
+        let camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 1, 100);
+        camera.position.set(0, 0, 5);
+        let renderer = new THREE.WebGLRenderer();
+        renderer.setSize(innerWidth, innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        let g = new THREE.BufferGeometry().setFromPoints([
+            new THREE.Vector2(-2, 0, 5),
+            new THREE.Vector2(0, 0.5, 5),
+            new THREE.Vector2(1, -1, 5)
+        ]);
+        let uniforms = {
+            time: { value: 0 }
+        }
+        let m = new THREE.LineDashedMaterial({
+            color: "red",
+            dashSize: 0.1,
+            gapSize: 0.025,
+            onBeforeCompile: shader => {
+                shader.uniforms.time = uniforms.time;
+                shader.fragmentShader = ` uniform float time; ${shader.fragmentShader} `.replace(`vLineDistance,`, `vLineDistance - time,`);
+                console.log(shader.fragmentShader);
+            }
+        });
+        let l = new THREE.Line(g, m);
+        l.computeLineDistances();
+        scene.add(l);
+
+        let clock = new THREE.Clock();
+
+        renderer.setAnimationLoop(_ => {
+            uniforms.time.value = clock.getElapsedTime();
+            renderer.render(scene, camera);
+        });
+    </script>
+</body>
+
+</html>
